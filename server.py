@@ -1,5 +1,4 @@
 from flask import Flask, jsonify
-from flask_common import Common
 
 import requests
 
@@ -95,6 +94,3 @@ def get_exchange(coin1, coin2):
         'value': c.value(coin2),
         'value.coin': coin2
     })
-
-if __name__ == "__main__":
-    common.serve()
