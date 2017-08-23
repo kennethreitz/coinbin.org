@@ -71,7 +71,7 @@ def hello():
     return jsonify(urls=[
         {'/coins': 'Returns all known coin names.'},
         {'/:coin': 'Returns current value and rank of the given coin.'},
-        {'/:coin/history': 'Returns the value history of the given coin.'},
+        {'/:coin/history': 'Returns the value history of the given coin (4 year daily history).'},
         {'/:coin/:n': 'Returns current value of n coins.'},
         {'/:coin/to/:coin': 'Returns current exchange rate of two given coins.'},
         {'/:coin/:n/to/:coin/': 'Returns the current value n coins, in any other coin.'},
