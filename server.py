@@ -316,7 +316,7 @@ def get_exchange_value(coin1, coin2, n):
         # 'name': c.name,
         # 'ticker': c.ticker,
         'value': c.value(coin2) * n,
-        'value.currency': 'USD',
+        'value.coin': coin2,
         'exchange_rate': c.value(coin2)
     })
 
