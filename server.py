@@ -56,7 +56,6 @@ print(get_coin('btc').value('eth'))
 
 app = Flask(__name__)
 
-common = Common(app)
 
 @app.route('/')
 # @common.cache.cached(timeout=50)
