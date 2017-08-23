@@ -25,7 +25,7 @@ class Coin():
 
     def update(self):
         j = self._get()
-        print 'Fetching data on {}'
+        print('Fetching data on {}')
         self.name = j['name']
         self.rank = j['position']
         self._value = j['price']['usd']
