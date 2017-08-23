@@ -2,7 +2,6 @@ from flask import Flask
 from flask_common import Common
 
 app = Flask(__name__)
-app.debug = True
 
 common = Common(app)
 
