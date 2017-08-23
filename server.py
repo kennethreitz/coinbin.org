@@ -1,12 +1,15 @@
 from flask import Flask, jsonify
 
+import maya
 import requests
+import records
 
 session = requests.Session()
 
 MARKETCAP_ALL_URL = 'https://coinmarketcap-nexuist.rhcloud.com/api/all'
 MARKETCAP_COIN_TEMPLATE = 'https://coinmarketcap-nexuist.rhcloud.com/api/{ticker}'
 
+db = records.Database()
 
 class Coin():
     """A Coin, unlike Mario's."""
@@ -105,6 +108,20 @@ def get_value(coin, n):
 def get_value_int(coin, n):
     return get_value(coin, n)
 
+
+@app.route('/<coin>/history')
+def get_history(coin):
+    c = Coin(coin)
+    rows = db.query("SELECT * from api_coin WHERE name=:coin ORDER BY date desc", coin=c.name)
+
+    return jsonify(history=[
+        {
+            'value': r.value,
+            'value.currency': 'USD',
+            'timestamp': maya.MayaDT.from_datetime(r.date).iso8601(),
+            'when': maya.MayaDT.from_datetime(r.date).slang_date()
+        } for r in rows]
+    )
 
 @app.route('/<coin1>/to/<coin2>')
 def get_exchange(coin1, coin2):
