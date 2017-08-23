@@ -7,8 +7,10 @@ session = requests.Session()
 MARKETCAP_ALL_URL = 'https://coinmarketcap-nexuist.rhcloud.com/api/all'
 MARKETCAP_COIN_TEMPLATE = 'https://coinmarketcap-nexuist.rhcloud.com/api/{ticker}'
 
+
 class Coin():
     """A Coin, unlike Mario's."""
+
     def __init__(self, ticker):
         self.ticker = ticker
         self.name = None
@@ -16,7 +18,6 @@ class Coin():
         self._value = None
 
         self.update()
-
 
     def _get(self):
         url = MARKETCAP_COIN_TEMPLATE.format(ticker=self.ticker)
@@ -67,8 +68,9 @@ def hello():
     return jsonify(urls=[
         {'/coins': 'Returns all known coins.'},
         {'/:coin': 'Returns current value and rank of given coin.'},
-        {'/:coin/:coin': 'Returns current exchange rate of two given coins.'},
-        {'/:coin/:coin/:n': 'Returns the current value n coins, in any other coin.'},
+        {'/:coin/:n': 'Returns current value of n coins.'},
+        {'/:coin/to/:coin': 'Returns current exchange rate of two given coins.'},
+        {'/:coin/:n/to/:coin/': 'Returns the current value n coins, in any other coin.'},
     ])
 
 
@@ -84,27 +86,48 @@ def get_coin(coin):
         'name': c.name,
         'ticker': c.ticker,
         'rank': c.rank,
-        'value': c.usd
+        'value': c.usd,
+        'value.currency': 'USD'
     })
 
 
-@app.route('/<coin1>/<coin2>')
+@app.route('/<coin>/<float:n>')
+def get_value(coin, n):
+    c = Coin(coin)
+    return jsonify(coin={
+        'value': c.usd * n,
+        'value.currency': 'USD',
+        'exchange_rate': c.usd
+    })
+
+
+@app.route('/<coin>/<int:n>')
+def get_value_int(coin, n):
+    return get_value(coin, n)
+
+
+@app.route('/<coin1>/to/<coin2>')
 def get_exchange(coin1, coin2):
     c = Coin(coin1)
     return jsonify(coin={
         # 'name': c.name,
         # 'ticker': c.ticker,
-        'value': c.value(coin2),
-        'value.coin': coin2
+        'exchange_rate': c.value(coin2),
     })
 
-@app.route('/<coin1>/<coin2>/<n>')
+
+@app.route('/<coin1>/<float:n>/to/<coin2>/')
 def get_exchange_value(coin1, coin2, n):
-    n = float(n)
     c = Coin(coin1)
     return jsonify(coin={
         # 'name': c.name,
         # 'ticker': c.ticker,
         'value': c.value(coin2) * n,
+        'value.currency': 'USD',
         'exchange_rate': c.value(coin2)
     })
+
+
+@app.route('/<coin1>/<int:n>/to/<coin2>/')
+def get_exchange_value_int(coin1, coin2, n):
+    return get_exchange_value(coin1, coin2, n)
