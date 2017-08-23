@@ -25,6 +25,7 @@ class Coin():
 
     def update(self):
         j = self._get()
+        print 'Fetching data on {}'
         self.name = j['name']
         self.rank = j['position']
         self._value = j['price']['usd']
@@ -61,10 +62,10 @@ app = Flask(__name__)
 # @common.cache.cached(timeout=50)
 def hello():
     return jsonify(urls=[
-        {'/coins': 'Returns all known crypto currencies.'},
+        {'/coins': 'Returns all known coins.'},
         {'/:coin': 'Returns current value and rank of given coin.'},
         {'/:coin/:coin': 'Returns current exchange rate of two given coins.'},
-
+        {'/:coin/:coin/:n': 'Returns the current value n coins, in any other coin.'},
     ])
 
 
@@ -88,8 +89,19 @@ def get_coin(coin):
 def get_exchange(coin1, coin2):
     c = Coin(coin1)
     return jsonify(coin={
-        'name': c.name,
-        'ticker': c.ticker,
+        # 'name': c.name,
+        # 'ticker': c.ticker,
         'value': c.value(coin2),
         'value.coin': coin2
+    })
+
+@app.route('/<coin1>/<coin2>/<n>')
+def get_exchange_value(coin1, coin2, n):
+    n = float(n)
+    c = Coin(coin1)
+    return jsonify(coin={
+        # 'name': c.name,
+        # 'ticker': c.ticker,
+        'value': c.value(coin2) * n,
+        'exchange_rate': c.value(coin2)
     })
