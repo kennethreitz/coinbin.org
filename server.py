@@ -33,7 +33,6 @@ class Coin():
         except KeyError:
             print(j)
 
-
     @property
     def usd(self):
         return self._value
@@ -42,14 +41,14 @@ class Coin():
         """Example: BTC -> ETH"""
         return (self.usd / Coin(coin).usd)
 
-
     def __repr__(self):
         return f'<Coin ticker={self.ticker!r}>'
 
 
 def get_coins():
     r = session.get(MARKETCAP_ALL_URL)
-    return (k for k in r.json().keys()])
+    return (k for k in r.json().keys())
+
 
 def get_coin(ticker):
     return Coin(ticker)
