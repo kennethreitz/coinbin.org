@@ -5,3 +5,7 @@ verify_ssl = true
 [packages]
 flask = "*"
 flask-common = "*"
+coinmarketcap = "*"
+records = "*"
+psycopg2 = "*"
+maya = "*"
