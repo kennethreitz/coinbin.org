@@ -14,3 +14,7 @@ This free web service exists to provide information on "coins".
 * [42 ETH Value in BTC](http://coinbin.org/eth/42/to/btc) `/eth/42/to/btc`
 
 Supports all crypto–currencies. 
+
+## Like this project?
+
+Consider [tipping us](http://coinbin.org/thanks)! We has many wallets. 
