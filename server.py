@@ -312,12 +312,13 @@ def get_exchange(coin1, coin2):
 @app.route('/<coin1>/<float:n>/to/<coin2>/')
 def get_exchange_value(coin1, coin2, n):
     c = Coin(coin1)
+    v = c.value(coin2)
     return jsonify(coin={
         # 'name': c.name,
         # 'ticker': c.ticker,
-        'value': c.value(coin2) * n,
-        'value.currency': 'USD',
-        'exchange_rate': c.value(coin2)
+        'value': v * n,
+        'value.currency': coin2,
+        'exchange_rate': v
     })
 
 
