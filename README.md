@@ -1,4 +1,6 @@
-# Coinhub.org: A Human–Friendly API Service for Crypto Currency Information
+# Coinhub.org
+
+### The Human–Friendly API Service for Crypto Currency Information.
 
 This free web service exists to provide information on "coins".
 
