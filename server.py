@@ -49,7 +49,7 @@ class Coin():
 
 def get_coins():
     r = session.get(MARKETCAP_ALL_URL)
-    return ([Coin(k) for k in r.json().keys()])
+    return (k for k in r.json().keys()])
 
 def get_coin(ticker):
     return Coin(ticker)
@@ -75,7 +75,7 @@ def hello():
 
 @app.route('/coins')
 def coins():
-    return jsonify(coins=[c.ticker for c in all_coins])
+    return jsonify(coins=all_coins)
 
 
 @app.route('/<coin>')
