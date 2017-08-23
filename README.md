@@ -10,4 +10,5 @@ This free web service exists to provide information on "coins".
 * [BTC / ETH Exchange Rate](http://coinbin.org/btc/to/eth) `/btc/to/eth`
 * [20.01 BTC Value](http://coinbin.org/btc/20.01) `/btc/20.01`
 * [42 ETH Value in BTC](http://coinbin.org/eth/42/to/btc) `/eth/42/to/btc`
-* Supports all crypto–currencies. 
+
+Supports all crypto–currencies. 
