@@ -76,7 +76,7 @@ def hello():
         {'/:coin/to/:coin': 'Returns current exchange rate of two given coins.'},
         {'/:coin/:n/to/:coin/': 'Returns the current value n coins, in any other coin.'},
         {'/thanks': 'Send us coins for running this free service!'}
-    ])
+    ], source='https://github.com/kennethreitz/coinbin.org')
 
 @app.route('/thanks')
 def thanks():
