@@ -47,7 +47,7 @@ class Coin():
 
 def get_coins():
     r = session.get(MARKETCAP_ALL_URL)
-    return (k for k in r.json().keys())
+    return [k for k in r.json().keys()]
 
 
 def get_coin(ticker):
