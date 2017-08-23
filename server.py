@@ -75,8 +75,24 @@ def hello():
         {'/:coin/:n': 'Returns current value of n coins.'},
         {'/:coin/to/:coin': 'Returns current exchange rate of two given coins.'},
         {'/:coin/:n/to/:coin/': 'Returns the current value n coins, in any other coin.'},
+        {'/thanks': 'Send us coins for running this free service!'}
     ])
 
+@app.route('/thanks')
+def thanks():
+    return jsonify(wallets={
+        'btc': '1PYZH8SCXQF7c2qgpsQ8kDgKixXeYvVsKv',
+        'ltc': 'LXPtxt68njDdTBdu1ZvHUbARhHsPm9T3Zq',
+        'doge': 'DRDjoTo3zg64QHpq3xgrVVJnerLAvVzMbc',
+        'vtc': 'VvNd9XoYKavHagE6VkLNPeAazFmpgMZgQ5',
+        'ppc': 'PMQWpq15QxT4dR6h6NrvrJMNtehcmRVxYW',
+        'ftc': '6zDLXZmoNBdz87ZMvtK2JF7C3NRuKu2nVr',
+        'rdd': 'RudBYrzAQeYmDXHhMXs7hPsYJc7n1C7Trt',
+        'nxt': {'message': '64e086b979514034946628b937ce3fcb2f0e34c84823402ab9f41a4940a6cff4', 'address': 'NXT-97H4-KRWL-A53G-7GVRG'},
+        'dash': 'XvtKBmKUhiEPQyEgNxvSRt9hyHBCN8Mia7',
+        'pot': 'PTjS6cpqGoUUbEKyUWMqHk92ymvXMi84Ti',
+
+    }, note='Your donations are greatly appreciated!')
 
 @app.route('/coins')
 def coins():
