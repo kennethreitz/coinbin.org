@@ -26,9 +26,13 @@ class Coin():
     def update(self):
         j = self._get()
         print(f'Fetching data on {self.ticker}')
-        self.name = j['name']
-        self.rank = j['position']
-        self._value = j['price']['usd']
+        try:
+            self.name = j['name']
+            self.rank = j['position']
+            self._value = j['price']['usd']
+        except KeyError:
+            print(j)
+
 
     @property
     def usd(self):
