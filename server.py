@@ -15,7 +15,7 @@ MARKETCAP_COIN_TEMPLATE = 'https://coinmarketcap-nexuist.rhcloud.com/api/{ticker
 API_KEYS = os.environ.get('API_KEYS', '').split(':')
 
 db = records.Database()
-pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL'])
+pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL_URL'])
 
 class Coin():
     """A Coin, unlike Mario's."""
