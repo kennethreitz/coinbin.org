@@ -6,7 +6,8 @@ This free web service exists to provide information on "coins". Supports all cry
 
 ### Example API Endpoints
 
-**$ curl [https://coinbin.org/lbc](https://coinbin.org/lbc)**
+`$ curl [https://coinbin.org/lbc`
+
 ```json
 {
   "coin": {
@@ -20,7 +21,8 @@ This free web service exists to provide information on "coins". Supports all cry
 ```
       
 
-**$ curl [https://coinbin.org/lbc/42.01](https://coinbin.org/lbc/42.01)**
+`$ curl [https://coinbin.org/lbc/42.01`
+
 ```json
 {
   "coin": {
@@ -32,7 +34,8 @@ This free web service exists to provide information on "coins". Supports all cry
 ```
       
 
-**$ curl [https://coinbin.org/lbc/to/sc](https://coinbin.org/lbc/to/sc)**
+`$ curl [https://coinbin.org/lbc/to/sc`
+
 ```
 {
   "coin": {
@@ -42,7 +45,8 @@ This free web service exists to provide information on "coins". Supports all cry
 ```
       
 
-**$ curl [https://coinbin.org/lbc/42.01/to/sc](https://coinbin.org/lbc/42.01/to/sc)**
+`$ curl [https://coinbin.org/lbc/42.01/to/sc`
+
 ```json
 {
   "coin": {
@@ -53,7 +57,8 @@ This free web service exists to provide information on "coins". Supports all cry
 }
 ```
 
-**$ curl [https://coinbin.org/lbc/history](https://coinbin.org/lbc/history)**
+`$ curl [https://coinbin.org/lbc/history`
+
 ```json
 {
   "history": [
