@@ -4,15 +4,74 @@
 
 This free web service exists to provide information on "coins". Supports all crypto–currencies.
 
-## Example URIs:
+### Example API Endpoints
 
-* [List of All Known Coins](http://coinbin.org/coins) `/coins`
-* [BTC Current Value](http://coinbin.org/btc) `/btc`
-* [BTC Daily Historical Value](http://coinbin.org/btc/history) `/btc/history`
-* [Current BTC / ETH Exchange Rate](http://coinbin.org/btc/to/eth) `/btc/to/eth`
-* [Current 20.01 BTC Value](http://coinbin.org/btc/20.01) `/btc/20.01`
-* [Current 42 ETH Value in BTC](http://coinbin.org/eth/42/to/btc) `/eth/42/to/btc`
+**$ curl [https://coinbin.org/lbc](https://coinbin.org/lbc)**
 
+{
+  "coin": {
+    "name": "LBRY Credits", 
+    "rank": "100", 
+    "ticker": "lbc", 
+    "value": 0.429737, 
+    "value.currency": "USD"
+  }
+}
+
+      
+
+**$ curl [https://coinbin.org/lbc/42.01](https://coinbin.org/lbc/42.01)**
+
+{
+  "coin": {
+    "exchange_rate": 0.429737, 
+    "value": 18.053251369999998, 
+    "value.currency": "USD"
+  }
+}
+
+      
+
+**$ curl [https://coinbin.org/lbc/to/sc](https://coinbin.org/lbc/to/sc)**
+
+{
+  "coin": {
+    "exchange_rate": 61.98696034733942
+  }
+}
+
+      
+
+**$ curl [https://coinbin.org/lbc/42.01/to/sc](https://coinbin.org/lbc/42.01/to/sc)**
+
+{
+  "coin": {
+    "exchange_rate": 61.98696034733942, 
+    "value": 2604.072204191729, 
+    "value.coin": "sc"
+  }
+}
+ 
+
+**$ curl [https://coinbin.org/lbc/history](https://coinbin.org/lbc/history)**
+
+{
+  "history": [
+    {
+      "timestamp": "2017-08-24T04:00:55.932092Z",
+      "value": 0.3404,
+      "value.currency": "USD",
+      "when": "today"
+    }, ...
+
+... {
+      "timestamp": "2016-07-12T04:01:09.167162Z",
+      "value": 0.239634,
+      "value.currency": "USD",
+      "when": "Jul 12 2016"
+    }
+  ]
+}
 ## Like this project?
 
 Consider [tipping us](http://coinbin.org/thanks)! We has many wallets. 
