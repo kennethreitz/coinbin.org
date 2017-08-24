@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Coinbin.org: A Human–Friendly API Service for Crypto Currency Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='tufte.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='latex.css') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <article>
+      <h1 id="tufte-css">₿ Coinbin.org</h1>
+
+      <p class="subtitle">A Human–Friendly API Service for Crypto Currency Information.</p>
+
+      <p>This service provides machine (and human) friendly JSON data for all known crypto–currencies. All active & known coins are supported.</p>
+
+      <p>Historical data, exchange rates, conversion ratios, and value conversion endpoints are all available, free of charge<label for="sn-in-his-later-books" class="margin-toggle sidenote-number"></label></span><input type="checkbox" id="sn-in-his-later-books" class="margin-toggle"/><span class="sidenote"><em>If you enjoy this service, consider <a href="/thanks">sending us a tip</a>!</em></span>.</p>
+
+
+      <h2>Example API Endpoints</h2>
+      <p></p>
+      <code><strong>$ curl <a href="https://coinbin.org/lbc">https://coinbin.org/lbc</a></strong></code>
+      <!-- <p><small>Returns current market data for any given coin.</small></p> -->
+      <!-- <q>Returns current market data for any given coin.</q> -->
+      <pre>
+{{ lbc.data.decode('utf-8') }}
+      </pre>
+      <p></p>
+<code><strong>$ curl <a href="https://coinbin.org/lbc/42.01">https://coinbin.org/lbc/42.01</a></strong></code>
+      <pre>
+{{ lbc_42.data.decode('utf-8') }}
+      </pre>
+
+      <p></p>
+<code><strong>$ curl <a href="https://coinbin.org/lbc/to/sc">https://coinbin.org/lbc/to/sc</a></strong></code>
+      <pre>
+{{ lbc_sc.data.decode('utf-8') }}
+      </pre>
+
+
+      <p></p>
+<code><strong>$ curl <a href="https://coinbin.org/lbc/42.01/to/sc">https://coinbin.org/lbc/42.01/to/sc</a></strong></code>
+      <pre>
+{{ lbc_42_sc.data.decode('utf-8') }} </pre>
+
+      <p></p>
+<code><strong>$ curl <a href="https://coinbin.org/lbc/history">https://coinbin.org/lbc/history</a></strong></code>
+      <pre>
+{
+  "history": [
+    {
+      "timestamp": "2017-08-24T04:00:55.932092Z",
+      "value": 0.3404,
+      "value.currency": "USD",
+      "when": "today"
+    }, ...
+
+... {
+      "timestamp": "2016-07-12T04:01:09.167162Z",
+      "value": 0.239634,
+      "value.currency": "USD",
+      "when": "Jul 12 2016"
+    }
+  ]
+}</pre>
+<p><small>This endpoint returns up to four years of daily USD data, on any given coin.</small></p>
+
+
+<h2>Full List of Supported Coins</h2>
+
+  <p></p>
+<code><strong>$ curl <a href="https://coinbin.org/coins">https://coinbin.org/coins</a></strong></code>
+      <pre>
+{
+  "coins": [{% for coin in coins %}
+    "<a href="/{{ coin }}">{{ coin }}</a>", {% endfor %}
+  ]
+}
+      </pre>
+
+    </article>
+
+  <script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '599e2dbcbad3a763b70d2f2f');
+    t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+    t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
+
+  </body>
+</html>

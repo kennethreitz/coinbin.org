@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 import maya
 import requests
@@ -68,15 +68,13 @@ app = Flask(__name__)
 @app.route('/')
 # @common.cache.cached(timeout=50)
 def hello():
-    return jsonify(urls=[
-        {'/coins': 'Returns all known coin names.'},
-        {'/:coin': 'Returns current value and rank of the given coin.'},
-        {'/:coin/history': 'Returns the value history of the given coin (4 year daily history).'},
-        {'/:coin/:n': 'Returns current value of n coins.'},
-        {'/:coin/to/:coin': 'Returns current exchange rate of two given coins.'},
-        {'/:coin/:n/to/:coin/': 'Returns the current value n coins, in any other coin.'},
-        {'/thanks': 'Send us coins for running this free service!'}
-    ], source='https://github.com/kennethreitz/coinbin.org')
+
+    lbc = get_coin('lbc')
+    lbc_42 = get_value_int('lbc', 42.01)
+    lbc_sc = get_exchange('lbc', 'sc')
+    lbc_42_sc = get_exchange_value('lbc', 'sc', 42.01)
+
+    return render_template('index.html', lbc=lbc, lbc_42=lbc_42, lbc_sc=lbc_sc, lbc_42_sc=lbc_42_sc, coins=all_coins)
 
 @app.route('/thanks')
 def thanks():
