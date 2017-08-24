@@ -12,8 +12,7 @@ MARKETCAP_COIN_TEMPLATE = 'https://coinmarketcap-nexuist.rhcloud.com/api/{ticker
 
 db = records.Database()
 
-
-class Coin:
+class Coin():
     """A Coin, unlike Mario's."""
 
     def __init__(self, ticker):
@@ -45,7 +44,7 @@ class Coin:
 
     def value(self, coin):
         """Example: BTC -> ETH"""
-        return self.usd / Coin(coin).usd
+        return (self.usd / Coin(coin).usd)
 
     def __repr__(self):
         return f'<Coin ticker={self.ticker!r}>'
@@ -53,7 +52,7 @@ class Coin:
 
 def get_coins():
     r = session.get(MARKETCAP_ALL_URL)
-    return r.json().keys()
+    return [k for k in r.json().keys()]
 
 
 def get_coin(ticker):
@@ -67,7 +66,6 @@ print(get_coin('btc').value('eth'))
 app = Flask(__name__)
 sslify = SSLify(app)
 
-
 @app.route('/')
 # @common.cache.cached(timeout=50)
 def hello():
@@ -78,7 +76,6 @@ def hello():
     lbc_42_sc = get_exchange_value('lbc', 'sc', 42.01)
 
     return render_template('index.html', lbc=lbc, lbc_42=lbc_42, lbc_sc=lbc_sc, lbc_42_sc=lbc_42_sc, coins=all_coins)
-
 
 @app.route('/thanks')
 def thanks():
@@ -219,6 +216,7 @@ def thanks():
         'lgd': '0xce7591232523f66b14189c4cec4679e3ab7b3d8e',
         'trst': '0xa60ff29d26d373a88afbe74f6dbcab3aeca677e6',
         'wings': '0xb4466e1575882d28388820a719516d1dff412961',
+        'rlc': '0xab916ef71e19c56c98de93d0dba99469b1283db1',
         'bcc': '1LVojXegSH5EhrNQncWfxg7ErVh4N9HCAL',
         'qtum': '0x1646d7c096047756ab0b1cb636cf5dd5d36959d2',
         'part': 'Ph9oGH1vwtsFTHmAwYh3iS9J1vcVhoLXFk',
@@ -299,7 +297,6 @@ def get_history(coin):
             'when': maya.MayaDT.from_datetime(r.date).slang_date()
         } for r in rows]
     )
-
 
 @app.route('/<coin1>/to/<coin2>')
 def get_exchange(coin1, coin2):
