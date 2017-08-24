@@ -81,4 +81,4 @@ This free web service exists to provide information on "coins". Supports all cry
 
 ## Like this project?
 
-Consider [tipping us](http://coinbin.org/thanks)! We has many wallets. 
+Consider [tipping us](http://coinbin.org/thanks)! We have many wallets. 
