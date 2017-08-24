@@ -82,3 +82,7 @@ This free web service exists to provide information on "coins". Supports all cry
 ## Like this project?
 
 Consider [tipping us](http://coinbin.org/thanks)! We have many wallets. 
+
+## More Resources
+
+- [Awesome Crypto Currency Tools & Algorithms (Guide)](https://github.com/kennethreitz/awesome-coins)
