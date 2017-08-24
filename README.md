@@ -7,7 +7,7 @@ This free web service exists to provide information on "coins". Supports all cry
 ### Example API Endpoints
 
 **$ curl [https://coinbin.org/lbc](https://coinbin.org/lbc)**
-
+```json
 {
   "coin": {
     "name": "LBRY Credits", 
@@ -17,11 +17,11 @@ This free web service exists to provide information on "coins". Supports all cry
     "value.currency": "USD"
   }
 }
-
+```
       
 
 **$ curl [https://coinbin.org/lbc/42.01](https://coinbin.org/lbc/42.01)**
-
+```json
 {
   "coin": {
     "exchange_rate": 0.429737, 
@@ -29,21 +29,21 @@ This free web service exists to provide information on "coins". Supports all cry
     "value.currency": "USD"
   }
 }
-
+```
       
 
 **$ curl [https://coinbin.org/lbc/to/sc](https://coinbin.org/lbc/to/sc)**
-
+```
 {
   "coin": {
     "exchange_rate": 61.98696034733942
   }
 }
-
+```
       
 
 **$ curl [https://coinbin.org/lbc/42.01/to/sc](https://coinbin.org/lbc/42.01/to/sc)**
-
+```json
 {
   "coin": {
     "exchange_rate": 61.98696034733942, 
@@ -51,10 +51,10 @@ This free web service exists to provide information on "coins". Supports all cry
     "value.coin": "sc"
   }
 }
- 
+```
 
 **$ curl [https://coinbin.org/lbc/history](https://coinbin.org/lbc/history)**
-
+```json
 {
   "history": [
     {
@@ -72,6 +72,8 @@ This free web service exists to provide information on "coins". Supports all cry
     }
   ]
 }
+```
+
 ## Like this project?
 
 Consider [tipping us](http://coinbin.org/thanks)! We has many wallets. 
