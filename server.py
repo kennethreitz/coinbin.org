@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template
+from flask_sslify import SSLify
 
 import maya
 import requests
@@ -63,7 +64,7 @@ all_coins = get_coins()
 print(get_coin('btc').value('eth'))
 
 app = Flask(__name__)
-
+sslify = SSLify(app)
 
 @app.route('/')
 # @common.cache.cached(timeout=50)
