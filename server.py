@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, jsonify, render_template
 from flask_sslify import SSLify
 
@@ -10,7 +12,10 @@ session = requests.Session()
 MARKETCAP_ALL_URL = 'https://coinmarketcap-nexuist.rhcloud.com/api/all'
 MARKETCAP_COIN_TEMPLATE = 'https://coinmarketcap-nexuist.rhcloud.com/api/{ticker}'
 
+API_KEYS = os.environ.get('API_KEYS', '').split(':')
+
 db = records.Database()
+pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL'])
 
 class Coin():
     """A Coin, unlike Mario's."""
@@ -287,7 +292,16 @@ def get_value_int(coin, n):
 @app.route('/<coin>/history')
 def get_history(coin):
     c = Coin(coin)
-    rows = db.query("SELECT * from api_coin WHERE name=:coin ORDER BY date desc", coin=c.name)
+
+    q = "SELECT * from api_coin WHERE name=:coin ORDER BY date desc"
+
+    if request.args.get('key') in API_KEYS:
+        rows = pro_db.query(q, coin=c.name)
+    else:
+        rows = db.query(q, coin=c.name)
+
+
+
 
     return jsonify(history=[
         {
