@@ -296,6 +296,7 @@ def get_history(coin):
     q = "SELECT * from api_coin WHERE name=:coin ORDER BY date desc"
 
     if request.args.get('key') in API_KEYS:
+        print('Pro request!')
         rows = pro_db.query(q, coin=c.name)
     else:
         rows = db.query(q, coin=c.name)
