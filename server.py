@@ -30,13 +30,9 @@ class Coin():
         coins = get_coins()
         print(f'Fetching data on {self.ticker}')
 
-        try:
-            self.name = coins[self.ticker]['name']
-            self.rank = coins[self.ticker]['rank']
-            self._usd = coins[self.ticker]['usd']
-            # self._btc = j['price']['btc']
-        except KeyError:
-            print(j)
+        self.name = coins[self.ticker]['name']
+        self.rank = coins[self.ticker]['rank']
+        self._usd = coins[self.ticker]['usd']
 
     @property
     def usd(self):
