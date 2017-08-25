@@ -1,6 +1,6 @@
 import os
 
-from scraper import get_coins
+from scraper import get_coins, get_coin, Coin
 from wallets import wallets
 
 from flask import Flask, jsonify, render_template, request
@@ -14,46 +14,6 @@ API_KEYS = os.environ.get('API_KEYS', '').split(':')
 
 db = records.Database()
 pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL_URL'])
-
-class Coin():
-    """A Coin, unlike Mario's."""
-
-    def __init__(self, ticker):
-        self.ticker = ticker
-        self.name = None
-        self.rank = None
-        self._value = None
-
-        self.update()
-
-    def update(self):
-        coins = get_coins()
-        print(f'Fetching data on {self.ticker}')
-
-        self.name = coins[self.ticker]['name']
-        self.rank = coins[self.ticker]['rank']
-        self._usd = coins[self.ticker]['usd']
-
-    @property
-    def usd(self):
-        return self._usd
-
-    @property
-    def btc(self):
-        coins = get_coins()
-        rate = coins['btc']['usd']
-        return float(self.usd / rate)
-
-    def value(self, coin):
-        """Example: BTC -> ETH"""
-        return (self.btc / Coin(coin).btc)
-
-    def __repr__(self):
-        return f'<Coin ticker={self.ticker!r}>'
-
-
-def get_coin(ticker):
-    return Coin(ticker)
 
 
 app = Flask(__name__)
@@ -69,7 +29,7 @@ def hello():
     lbc_sc = get_exchange('lbc', 'sc')
     lbc_42_sc = get_exchange_value('lbc', 'sc', 42.01)
 
-    return render_template('index.html', lbc=lbc, lbc_42=lbc_42, lbc_sc=lbc_sc, lbc_42_sc=lbc_42_sc, coins=get_coins().keys())
+    return render_template('index.html', lbc=lbc, lbc_42=lbc_42, lbc_sc=lbc_sc, lbc_42_sc=lbc_42_sc, coins=get_coins().values())
 
 @app.route('/thanks')
 def thanks():
@@ -78,7 +38,7 @@ def thanks():
 
 @app.route('/coins')
 def all_coins():
-    return jsonify(coins=[k for k in get_coins().keys()])
+    return jsonify(coins=get_coins())
 
 
 @app.route('/<coin>')

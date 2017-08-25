@@ -46,6 +46,43 @@ class MWT(object):
         return func
 
 
+class Coin():
+    """A Coin, unlike Mario's."""
+
+    def __init__(self, ticker):
+        self.ticker = ticker
+        self.name = None
+        self.rank = None
+        self._value = None
+
+        self.update()
+
+    def update(self):
+        coins = get_coins()
+        print(f'Fetching data on {self.ticker}')
+
+        self.name = coins[self.ticker]['name']
+        self.rank = coins[self.ticker]['rank']
+        self._usd = coins[self.ticker]['usd']
+
+    @property
+    def usd(self):
+        return self._usd
+
+    @property
+    def btc(self):
+        coins = get_coins()
+        rate = coins['btc']['usd']
+        return float(self.usd / rate)
+
+    def value(self, coin):
+        """Example: BTC -> ETH"""
+        return (self.btc / Coin(coin).btc)
+
+    def __repr__(self):
+        return f'<Coin ticker={self.ticker!r}>'
+
+
 @MWT(timeout=300)
 def get_coins():
     coins_db = OrderedDict()
@@ -54,15 +91,26 @@ def get_coins():
     html = pq(pq(r.content)('table')[0]).html()
     df = pandas.read_html("<table>{}</table>".format(html))
     df = pandas.concat(df)
+
+    btc_value = float(df.to_dict()['Price'][0][1:].replace(',', ''))
+
     for row in df.itertuples():
 
         rank = int(row[1])
         name = row[2]
         ticker = row[3].lower()
         usd = float(row[5][1:].replace(',', ''))
+        btc = usd / btc_value
 
-        coins_db.update({ticker: {'rank': rank, 'name': name, 'ticker': ticker, 'usd': usd}})
+        coins_db.update({ticker: {'rank': rank, 'name': name, 'ticker': ticker, 'usd': usd, 'btc': btc}})
 
     return coins_db
+
+
+
+def get_coin(ticker):
+    return Coin(ticker)
+
+
 
 
