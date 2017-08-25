@@ -110,7 +110,7 @@ def get_exchange_value(coin1, coin2, n):
     return jsonify(coin={
         # 'name': c.name,
         # 'ticker': c.ticker,
-        'value': v * n,
+        'value': float(v) * n,
         'value.coin': coin2,
         'exchange_rate': v
     })

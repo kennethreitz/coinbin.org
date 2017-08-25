@@ -83,7 +83,7 @@
 {
   "coins": [{% for coin in coins %}
     "<strong><a href="/{{ coin['ticker'] }}">{{ coin['ticker'] }}</a></strong>":
-      {{ coin }},{% endfor %}
+      {{ coin|tojson }},{% endfor %}
   ]
 }
       </pre>
