@@ -117,3 +117,7 @@ def get_exchange_value(coin1, coin2, n):
 @app.route('/<coin1>/<int:n>/to/<coin2>/')
 def get_exchange_value_int(coin1, coin2, n):
     return get_exchange_value(coin1, coin2, n)
+
+
+if __name__ == '__main__':
+    common.serve()
