@@ -88,8 +88,8 @@ def get_history(coin):
         {
             'value': r.value,
             'value.currency': 'USD',
-            'timestamp': maya.MayaDT.from_datetime(r.date).iso8601(),
-            'when': maya.MayaDT.from_datetime(r.date).slang_time()
+            'timestamp': maya.MayaDT.from_datetime(r.date).subtract(hours=3).iso8601(),
+            'when': maya.MayaDT.from_datetime(r.date).subtract(hours=3).slang_time()
         } for r in rows]
     )
 
