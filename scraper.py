@@ -46,8 +46,10 @@ class MWT(object):
 
         return func
 
+
 def convert_to_decimal(f):
     return Decimal("{0:.8f}".format(f))
+
 
 class Coin():
     """A Coin, unlike Mario's."""

@@ -4,6 +4,7 @@ from scraper import get_coins, get_coin, Coin
 from wallets import wallets
 
 from flask import Flask, jsonify, render_template, request
+from flask.ext.cache import Cache
 from flask_sslify import SSLify
 
 import maya
@@ -17,11 +18,13 @@ pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL_URL'])
 
 
 app = Flask(__name__)
-app.debug = True
+
 
 sslify = SSLify(app)
+cache = Cache(app ,config={'CACHE_TYPE': 'simple'})
 
 @app.route('/')
+@cache.cached(timeout=60)
 def hello():
 
     lbc = get_coin('lbc')
@@ -79,9 +82,6 @@ def get_history(coin):
         rows = pro_db.query(q, coin=c.name)
     else:
         rows = db.query(q, coin=c.name)
-
-
-
 
     return jsonify(history=[
         {
