@@ -5,6 +5,7 @@ from wallets import wallets
 
 from flask import Flask, jsonify, render_template, request
 from flask_cache import Cache
+from flask_common import Common
 from flask_sslify import SSLify
 
 import maya
@@ -16,15 +17,12 @@ API_KEYS = os.environ.get('API_KEYS', '').split(':')
 db = records.Database()
 pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL_URL'])
 
-
 app = Flask(__name__)
-
-
+common = Common(app)
 sslify = SSLify(app)
-cache = Cache(app ,config={'CACHE_TYPE': 'simple'})
 
 @app.route('/')
-@cache.cached(timeout=60)
+@common.cache.cached(timeout=60)
 def hello():
 
     lbc = get_coin('lbc')
