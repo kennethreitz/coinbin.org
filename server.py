@@ -88,12 +88,12 @@ def get_history(coin):
     )
 
 @app.route('/<coin1>/to/<coin2>')
-def get_exchange(coin1.lower(), coin2.lower()):
-    c = Coin(coin1)
+def get_exchange(coin1, coin2):
+    c = Coin(coin1.lower())
     return jsonify(coin={
         # 'name': c.name,
         # 'ticker': c.ticker,
-        'exchange_rate': c.value(coin2),
+        'exchange_rate': c.value(coin2.lower()),
     })
 
 
