@@ -1,6 +1,7 @@
 import pandas
 import requests
 
+import crayons
 from pyquery import PyQuery as pq
 
 import time
@@ -64,7 +65,7 @@ class Coin():
 
     def update(self):
         coins = get_coins()
-        print(f'Fetching data on {self.ticker}')
+        print(f'Fetching data on {crayons.cyan(self.ticker)}...')
 
         self.name = coins[self.ticker]['name']
         self.rank = coins[self.ticker]['rank']

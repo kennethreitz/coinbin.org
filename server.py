@@ -8,6 +8,7 @@ from flask_cache import Cache
 from flask_common import Common
 from flask_sslify import SSLify
 
+import crayons
 import maya
 import requests
 import records
@@ -78,7 +79,7 @@ def get_history(coin):
     q = "SELECT * from api_coin WHERE name=:coin ORDER BY date desc"
 
     if request.args.get('key') in API_KEYS:
-        print('Pro request!')
+        print(crayons.red('Pro request!'))
         rows = pro_db.query(q, coin=c.name)
     else:
         rows = db.query(q, coin=c.name)
@@ -88,7 +89,7 @@ def get_history(coin):
             'value': r.value,
             'value.currency': 'USD',
             'timestamp': maya.MayaDT.from_datetime(r.date).iso8601(),
-            'when': maya.MayaDT.from_datetime(r.date).slang_date()
+            'when': maya.MayaDT.from_datetime(r.date).slang_time()
         } for r in rows]
     )
 
