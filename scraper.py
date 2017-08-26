@@ -46,6 +46,8 @@ class MWT(object):
 
         return func
 
+def convert_to_decimal(f):
+    return Decimal("{0:.8f}".format(f))
 
 class Coin():
     """A Coin, unlike Mario's."""
@@ -74,11 +76,11 @@ class Coin():
     def btc(self):
         coins = get_coins()
         rate = coins['btc']['usd']
-        return Decimal("{0:.8f}".format(self.usd / rate))
+        return convert_to_decimal(self.usd / rate)
 
     def value(self, coin):
         """Example: BTC -> ETH"""
-        return (self.btc / Coin(coin).btc)
+        return convert_to_decimal(self.btc / Coin(coin).btc)
 
     def __repr__(self):
         return f'<Coin ticker={self.ticker!r}>'
@@ -101,17 +103,12 @@ def get_coins():
         name = row[2]
         ticker = row[3].lower()
         usd = float(row[5][1:].replace(',', ''))
-        btc = Decimal("{0:.8f}".format(usd / btc_value))
+        btc = convert_to_decimal(usd / btc_value)
 
         coins_db.update({ticker: {'rank': rank, 'name': name, 'ticker': ticker, 'usd': usd, 'btc': btc}})
 
     return coins_db
 
 
-
 def get_coin(ticker):
     return Coin(ticker)
-
-
-
-
