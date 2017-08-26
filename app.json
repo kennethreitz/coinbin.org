@@ -1,0 +1,34 @@
+{
+  "name": "coinbin.org",
+  "scripts": {
+  },
+  "env": {
+    "API_KEYS": {
+      "required": true
+    },
+    "HEROKU_POSTGRESQL_AMBER_URL": {
+      "required": true
+    },
+    "HEROKU_POSTGRESQL_TEAL_URL": {
+      "required": true
+    },
+    "SENTRY_DSN": {
+      "required": true
+    },
+    "WEB_CONCURRENCY": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "heroku-postgresql",
+    "heroku-postgresql",
+    "sentry"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
