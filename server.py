@@ -101,6 +101,7 @@ def get_exchange(coin1, coin2):
 def get_exchange_value(coin1, coin2, n):
     c = Coin(coin1.lower())
     v = c.value(coin2.lower())
+    n = convert_to_decimal(n)
 
     return jsonify(coin={
         'value': convert_to_decimal(v * n),
