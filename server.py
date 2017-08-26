@@ -18,6 +18,8 @@ db = records.Database()
 pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL_URL'])
 
 app = Flask(__name__)
+app.debug = 'DEBUG' in os.environ
+
 common = Common(app)
 sslify = SSLify(app)
 
