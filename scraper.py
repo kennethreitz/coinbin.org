@@ -93,6 +93,8 @@ class Coin():
 def get_coins():
     coins_db = OrderedDict()
 
+    print(crayons.yellow('Scraping CoinMaketCap...'))
+
     r = session.get(url)
     html = pq(pq(r.content)('table')[0]).html()
     df = pandas.read_html("<table>{}</table>".format(html))
