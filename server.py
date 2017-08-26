@@ -4,7 +4,7 @@ from scraper import get_coins, get_coin, Coin
 from wallets import wallets
 
 from flask import Flask, jsonify, render_template, request
-from flask.ext.cache import Cache
+from flask_cache import Cache
 from flask_sslify import SSLify
 
 import maya
