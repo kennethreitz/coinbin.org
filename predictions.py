@@ -47,7 +47,7 @@ class MWT(object):
 
 
 @MWT(timeout=120)
-def get_prediction(coin):
+def get_predictions(coin):
 
     c = Coin(coin.lower())
 
