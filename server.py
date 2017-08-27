@@ -1,6 +1,7 @@
 import os
 
 from scraper import get_coins, get_coin, Coin, convert_to_decimal
+from predictions import get_predictions
 
 from flask import Flask, jsonify, render_template, request
 from flask_cache import Cache
@@ -50,6 +51,11 @@ def get_coin(coin):
         'usd': c.usd,
         'btc': c.btc
     })
+
+
+@app.route('/<coin>/forecast')
+def get_forecast(coin):
+    return jsonify(forecast=get_predictions(coin.lower()))
 
 
 @app.route('/<coin>/<float:n>')
