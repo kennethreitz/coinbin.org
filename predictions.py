@@ -83,7 +83,7 @@ def get_predictions(coin):
     d = forecast_data_orig['yhat'].to_dict()
     predictions = []
     for i, k in enumerate(list(d.keys())[-6:]):
-        w = maya.when(f'{61*i} minutes from now')
+        w = maya.when(f'{61*i+1} minutes from now')
         predictions.append({
             'when': w.slang_time(),
             'timestamp': w.iso8601(),
