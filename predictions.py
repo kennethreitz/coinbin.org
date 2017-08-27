@@ -46,6 +46,7 @@ class MWT(object):
         return func
 
 
+@MWT(timeout=300)
 def get_predictions(coin):
 
     c = Coin(coin.lower())
