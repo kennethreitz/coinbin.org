@@ -85,7 +85,7 @@ def get_predictions(coin):
     for i, k in enumerate(list(d.keys())[-6:]):
         w = maya.when(f'{61*i} minutes from now')
         predictions.append({
-            'when': d.slang_time(),
+            'when': w.slang_time(),
             'timestamp': w.iso8601(),
             'usd': d[k],
         })
