@@ -14,7 +14,7 @@ from scraper import Coin, MWT, convert_to_decimal
 @MWT(timeout=300)
 def get_predictions(coin):
 
-    c = Coin(coin.lower())
+    c = Coin(coin)
 
     q = "SELECT date as ds, value as y from api_coin WHERE name=:coin"
 
