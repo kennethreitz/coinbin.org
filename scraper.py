@@ -107,7 +107,13 @@ def get_coins():
         rank = int(row[1])
         name = row[2]
         ticker = row[3].lower()
-        usd = float(row[5][1:].replace(',', ''))
+        try:
+            usd = float(row[5][1:].replace(',', ''))
+        except ValueError:
+            usd = 0
+        finally:
+            pass
+
         btc = convert_to_decimal(usd / btc_value)
 
         coins_db.update({ticker: {'rank': rank, 'name': name, 'ticker': ticker, 'usd': usd, 'btc': btc}})
