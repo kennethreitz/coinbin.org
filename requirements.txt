@@ -5,7 +5,6 @@ bs4==0.0.1
 certifi==2017.7.27.1
 chardet==3.0.4
 click==6.7
-coinmarketcap==3.0.1
 colorama==0.3.9
 crayons==0.1.2
 cssselect==1.0.1
@@ -14,7 +13,7 @@ Cython==0.26
 dateparser==0.6.0
 docopt==0.6.2
 et-xmlfile==1.0.1
-fbprophet==0.1.1
+# bprophet==0.1.1
 Flask==0.12.2
 Flask-Cache==0.13.1
 Flask-Common==0.2.0
