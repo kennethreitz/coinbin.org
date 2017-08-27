@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from fbprophet import Prophet
 
-from scraper import Coin, MWT
+from scraper import Coin, MWT, convert_to_decimal
 
 
 @MWT(timeout=300)
@@ -51,7 +51,7 @@ def get_predictions(coin):
         predictions.append({
             'when': w.slang_time(),
             'timestamp': w.iso8601(),
-            'usd': d[k],
+            'usd': convert_to_decimal(d[k]),
         })
     return predictions
 
