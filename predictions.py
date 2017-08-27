@@ -54,7 +54,7 @@ def get_predictions(coin):
     usd = requests.get('https://coinbin.org/btc').json()['coin']['usd']
 
     pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL_URL'])
-    rows = pro_db.query(q, coin='NEO')
+    rows = pro_db.query(q, coin=c.ticker)
 
     df = rows.export('df')
 
