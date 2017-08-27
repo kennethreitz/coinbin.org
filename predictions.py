@@ -31,7 +31,7 @@ def get_predictions(coin):
     model = Prophet(weekly_seasonality=True, yearly_seasonality=True)
     model.fit(df)
 
-    future_data = model.make_future_dataframe(periods=6, freq='h')
+    future_data = model.make_future_dataframe(periods=6, freq='d')
     forecast_data = model.predict(future_data)
     print(forecast_data[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
 
@@ -47,7 +47,7 @@ def get_predictions(coin):
     d = forecast_data_orig['yhat'].to_dict()
     predictions = []
     for i, k in enumerate(list(d.keys())[-6:]):
-        w = maya.when(f'{61*i+1} minutes from now')
+        w = maya.when(f'{i+1} days from now')
         predictions.append({
             'when': w.slang_time(),
             'timestamp': w.iso8601(),
