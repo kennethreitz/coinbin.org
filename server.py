@@ -34,7 +34,7 @@ def hello():
     lbc_42_sc = get_exchange_value('lbc', 'sc', 42.01)
     lbc_forecast = get_forecast('lbc')
 
-    return render_template('index.html', lbc=lbc, lbc_42=lbc_42, lbc_sc=lbc_sc, lbc_42_sc=lbc_42_sc, coins=get_coins().values())
+    return render_template('index.html', lbc=lbc, lbc_42=lbc_42, lbc_sc=lbc_sc, lbc_42_sc=lbc_42_sc, coins=get_coins().values(), lbc_forecast=lbc_forecast)
 
 @app.route('/coins')
 def all_coins():
