@@ -32,6 +32,7 @@ def hello():
     lbc_42 = get_value_int('lbc', 42.01)
     lbc_sc = get_exchange('lbc', 'sc')
     lbc_42_sc = get_exchange_value('lbc', 'sc', 42.01)
+    lbc_forecast = get_forecast('lbc')
 
     return render_template('index.html', lbc=lbc, lbc_42=lbc_42, lbc_sc=lbc_sc, lbc_42_sc=lbc_42_sc, coins=get_coins().values())
 
