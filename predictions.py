@@ -63,7 +63,7 @@ def get_predictions(coin):
     # log-transform y
     df['y'] = np.log(df['y'])
 
-    model = Prophet(weekly_seasonality=True, mothly_seasonality=True, yearly_seasonality=True)
+    model = Prophet(weekly_seasonality=True, yearly_seasonality=True)
     model.fit(df)
 
     future_data = model.make_future_dataframe(periods=6, freq='h')
