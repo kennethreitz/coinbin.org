@@ -18,8 +18,8 @@ def get_predictions(coin):
 
     q = "SELECT date as ds, value as y from api_coin WHERE name=:coin"
 
-    pro_db = records.Database(os.environ['HEROKU_POSTGRESQL_TEAL_URL'])
-    rows = pro_db.query(q, coin=c.name)
+    db = records.Database()
+    rows = db.query(q, coin=c.name)
 
     df = rows.export('df')
 
@@ -31,7 +31,7 @@ def get_predictions(coin):
     model = Prophet(weekly_seasonality=True, yearly_seasonality=True)
     model.fit(df)
 
-    future_data = model.make_future_dataframe(periods=30, freq='d')
+    future_data = model.make_future_dataframe(periods=365, freq='d')
     forecast_data = model.predict(future_data)
     print(forecast_data[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
 
@@ -46,7 +46,7 @@ def get_predictions(coin):
     # print(forecast_data_orig)
     d = forecast_data_orig['yhat'].to_dict()
     predictions = []
-    for i, k in enumerate(list(d.keys())[-30:]):
+    for i, k in enumerate(list(d.keys())[-365:]):
         w = maya.when(f'{i+1} days from now')
         predictions.append({
             'when': w.slang_time(),
