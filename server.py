@@ -2,8 +2,10 @@ import os
 
 from scraper import get_coins, get_coin, Coin, convert_to_decimal
 from predictions import get_predictions
+from graph import schema
 
 from flask import Flask, jsonify, render_template, request
+from flask_graphql import GraphQLView
 from flask_cache import Cache
 from flask_common import Common
 from flask_sslify import SSLify
@@ -120,6 +122,11 @@ def get_exchange_value(coin1, coin2, n):
 @app.route('/<coin1>/<int:n>/to/<coin2>/')
 def get_exchange_value_int(coin1, coin2, n):
     return get_exchange_value(coin1.lower(), coin2, n)
+
+
+# GraphQL stuff.
+app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+# app.add_url_rule('/graphql/batch', view_func=GraphQLView.as_view('graphql', schema=schema, batch=True))
 
 
 if __name__ == '__main__':

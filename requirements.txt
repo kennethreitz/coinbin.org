@@ -5,6 +5,7 @@ bs4==0.0.1
 certifi==2017.7.27.1
 chardet==3.0.4
 click==6.7
+coinmarketcap==3.0.1
 colorama==0.3.9
 crayons==0.1.2
 cssselect==1.0.1
@@ -17,7 +18,11 @@ fbprophet==0.1.1
 Flask==0.12.2
 Flask-Cache==0.13.1
 Flask-Common==0.2.0
+Flask-GraphQL==1.4.1
 Flask-SSLify==0.1.5
+graphene==1.4.1
+graphql-core==1.1
+graphql-relay==0.4.5
 greenlet==0.4.12
 gunicorn==19.7.1
 html5lib==0.999999999
@@ -40,6 +45,7 @@ pandas-datareader==0.5.0
 patsy==0.4.1
 pbr==3.1.1
 pendulum==1.2.4
+promise==2.0.2
 psycopg2==2.7.3.1
 pyparsing==2.2.0
 pyquery==1.2.17
@@ -61,6 +67,7 @@ six==1.10.0
 SQLAlchemy==1.1.13
 statsmodels==0.8.0
 tablib==0.12.0
+typing==3.6.2
 tzlocal==1.4
 unicodecsv==0.14.1
 urllib3==1.22
