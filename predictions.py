@@ -18,6 +18,8 @@ from scraper import Coin, MWT, convert_to_decimal
 
 
 PERIODS = 30
+GRAPH_PERIODS = 365
+
 
 
 @MWT(timeout=300)
@@ -43,7 +45,9 @@ def get_predictions(coin, render=False):
     model = Prophet(weekly_seasonality=True, yearly_seasonality=True)
     model.fit(df)
 
-    future_data = model.make_future_dataframe(periods=PERIODS, freq='d')
+    periods = PERIODS if not render else GRAPH_PERIODS
+
+    future_data = model.make_future_dataframe(periods=periods, freq='d')
     forecast_data = model.predict(future_data)
 
     if render:
