@@ -4,7 +4,7 @@ from scraper import get_coins, get_coin, Coin, convert_to_decimal
 from predictions import get_predictions
 from graph import schema
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_file
 from flask_graphql import GraphQLView
 from flask_cache import Cache
 from flask_common import Common
@@ -14,6 +14,7 @@ import crayons
 import maya
 import requests
 import records
+
 
 API_KEYS = os.environ.get('API_KEYS', '').split(':')
 
@@ -59,6 +60,12 @@ def get_coin(coin):
 @app.route('/<coin>/forecast')
 def get_forecast(coin):
     return jsonify(forecast=get_predictions(coin.lower()))
+
+
+@app.route('/<coin>/forecast/graph')
+def get_forecast_graph(coin):
+    f_name = get_predictions(coin.lower(), render=True)
+    return send_file(f_name, mimetype='image/png')
 
 
 @app.route('/<coin>/<float:n>')

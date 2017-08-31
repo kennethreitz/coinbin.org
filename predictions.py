@@ -1,4 +1,5 @@
 import time
+import uuid
 
 import records
 import os
@@ -6,13 +7,24 @@ import os
 import maya
 import numpy as np
 import pandas as pd
+
+# Matplotlib hack.
+import matplotlib
+matplotlib.use('agg')
+
 from fbprophet import Prophet
 
 from scraper import Coin, MWT, convert_to_decimal
 
 
+PERIODS = 365
+
+
 @MWT(timeout=300)
-def get_predictions(coin):
+def get_predictions(coin, render=False):
+    """Returns a list of predictions, unless render is True.
+    Otherwise, returns the path of a rendered image.
+    """
 
     c = Coin(coin)
 
@@ -31,9 +43,16 @@ def get_predictions(coin):
     model = Prophet(weekly_seasonality=True, yearly_seasonality=True)
     model.fit(df)
 
-    future_data = model.make_future_dataframe(periods=30, freq='d')
+    future_data = model.make_future_dataframe(periods=PERIODS, freq='d')
     forecast_data = model.predict(future_data)
-    print(forecast_data[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail())
+
+    if render:
+        f_name = str(uuid.uuid4())
+
+        matplotlib.pyplot.gcf()
+        model.plot(forecast_data).savefig(f_name)
+
+        return f'{f_name}.png'
 
     forecast_data_orig = forecast_data  # make sure we save the original forecast data
     forecast_data_orig['yhat'] = np.exp(forecast_data_orig['yhat'])
@@ -46,20 +65,17 @@ def get_predictions(coin):
     # print(forecast_data_orig)
     d = forecast_data_orig['yhat'].to_dict()
     predictions = []
-    for i, k in enumerate(list(d.keys())[-30:]):
+
+    for i, k in enumerate(list(d.keys())[-PERIODS:]):
         w = maya.when(f'{i+1} days from now')
         predictions.append({
             'when': w.slang_time(),
             'timestamp': w.iso8601(),
             'usd': convert_to_decimal(d[k]),
         })
+
     return predictions
 
 
-# results = list(zip(*[forecast_data_orig[c].values.tolist() for c in forecast_data_orig]))[-6:]
-# for result in results:
-#     dt = maya.MayaDT(result[0])
-#     _min = result[7]
-#     _max = result[8]
-#     _prediction = result[16]
-#     print(dt.slang_time(), _min, _max, _prediction)
+if __name__ == '__main__':
+    print(get_predictions('btc'))

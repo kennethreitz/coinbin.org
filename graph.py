@@ -29,7 +29,7 @@ class Coin(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     coin = graphene.Field(Coin, name=graphene.String())
-    # recent_top_packages = graphene.List(Package)
+    recent_top_coins = graphene.List(Coin)
 
     @graphene.resolve_only_args
     def resolve_coin(self, name=None, ticker=None):
