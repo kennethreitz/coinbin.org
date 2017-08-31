@@ -50,7 +50,7 @@ def get_predictions(coin, render=False):
         f_name = str(uuid.uuid4())
 
         matplotlib.pyplot.gcf()
-        model.plot(forecast_data).savefig(f_name)
+        model.plot(forecast_data).savefig(f_name, transparent=True)
 
         return f'{f_name}.png'
 
