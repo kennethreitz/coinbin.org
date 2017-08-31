@@ -17,7 +17,7 @@ from fbprophet import Prophet
 from scraper import Coin, MWT, convert_to_decimal
 
 
-PERIODS = 365
+PERIODS = 30
 
 
 @MWT(timeout=300)
