@@ -64,8 +64,8 @@ def get_forecast(coin):
 
 @app.route('/<coin>/forecast/graph')
 def get_forecast_graph(coin):
-    f_name = get_predictions(coin.lower(), render=True)
-    return send_file(f_name, mimetype='image/png')
+    return get_predictions(coin.lower(), render=True)
+    # return send_file(f_name, mimetype='image/png')
 
 
 @app.route('/<coin>/<float:n>')

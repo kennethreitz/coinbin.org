@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='tufte.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='latex.css') }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+      function resizeIframe(obj) {
+        obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        obj.style.width = obj.contentWindow.document.body.scrollWidth + 'px';
+      }
+    </script>
+
   </head>
 
   <body>
@@ -76,12 +84,12 @@
 
 <h2>Experimental (e.g. <em>fun</em>) Endpoints</h2>
 
-      <h3>Prediction of BTC Price (using <em>machine learning</em>)</h3>
+      <h3><a href="https://coinbin.org/btc/forecast/graph">Prediction of BTC Price</a> (using <em>machine learning</em>)</h3>
       <p>&nbsp;</p>
 
-      <a href="https://coinbin.org/btc/forecast/graph">
-        <img src="/btc/forecast/graph" alt="Graph of BTC prediction.">
-      </a>
+
+        <iframe src="/btc/forecast/graph" frameborder="0" scrolling="no" onload="resizeIframe(this)" width="80%"></iframe>
+
 
       <p></p>
 <code><strong>$ curl <a href="https://coinbin.org/btc/forecast">https://coinbin.org/btc/forecast</a></strong></code>

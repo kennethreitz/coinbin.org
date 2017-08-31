@@ -9,9 +9,11 @@ import numpy as np
 import pandas as pd
 
 # Matplotlib hack.
+
 import matplotlib
 matplotlib.use('agg')
 
+import mpld3
 from fbprophet import Prophet
 
 from scraper import Coin, MWT, convert_to_decimal
@@ -51,12 +53,9 @@ def get_predictions(coin, render=False):
     forecast_data = model.predict(future_data)
 
     if render:
-        f_name = str(uuid.uuid4())
-
         matplotlib.pyplot.gcf()
-        model.plot(forecast_data).savefig(f_name, transparent=True)
-
-        return f'{f_name}.png'
+        fig = model.plot(forecast_data, ylabel='log($)')
+        return mpld3.fig_to_html(fig)
 
     forecast_data_orig = forecast_data  # make sure we save the original forecast data
     forecast_data_orig['yhat'] = np.exp(forecast_data_orig['yhat'])
