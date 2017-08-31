@@ -54,7 +54,7 @@ def get_predictions(coin, render=False):
 
     if render:
         matplotlib.pyplot.gcf()
-        fig = model.plot(forecast_data, ylabel='log($)')
+        fig = model.plot(forecast_data, xlabel='Date', ylabel='log($)')
         return mpld3.fig_to_html(fig)
 
     forecast_data_orig = forecast_data  # make sure we save the original forecast data
