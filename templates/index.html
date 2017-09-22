@@ -5,7 +5,7 @@
     <title>Coinbin.org: A Human–Friendly API Service for Crypto Currency Information</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='tufte.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='latex.css') }}"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <script>
       function resizeIframe(obj) {
@@ -89,11 +89,7 @@
       <p><em><strong>Note — </strong>This information is presented for informational purposes
         only, and is not recommended for making actual trading decisions.</em></p>
 
-
-
-
-        <iframe src="/btc/forecast/graph" frameborder="0" scrolling="no" onload="resizeIframe(this)" width="80%"></iframe>
-
+      <pre><iframe src="/btc/forecast/graph" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe></pre>
 
       <p></p>
 <code><strong>$ curl <a href="https://coinbin.org/btc/forecast">https://coinbin.org/btc/forecast</a></strong></code>
