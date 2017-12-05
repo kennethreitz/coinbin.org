@@ -1,17 +1,20 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
+
 [packages]
+
 flask = "*"
 records = "*"
-psycopg2 = "*"
+"psycopg2" = "*"
 maya = "*"
 flask-sslify = "*"
 pyquery = "*"
 pandas = "*"
-html5lib = "*"
-bs4 = "*"
+"html5lib" = "*"
+"bs4" = "*"
 requests = "*"
 simplejson = "*"
 flask-cache = "*"
@@ -27,4 +30,11 @@ fbprophet = "*"
 cython = "*"
 flask-graphql = "*"
 graphene = "*"
-mpld3 = "*"
+"mpld3" = "*"
+raven = {extras = ["flask"]}
+"ruamel.ordereddict" = {version="*",  markers="python_version < '3.0.0'"}
+
+
+[requires]
+
+python_version = "3.6"
