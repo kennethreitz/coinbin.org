@@ -105,7 +105,7 @@ def get_coins():
     for row in df.itertuples():
 
         rank = int(row[1])
-        name = row[2]
+        name = ' '.join(row[2].split()[1:])
         ticker = row[3].lower()
         try:
             usd = float(row[5][1:].replace(',', ''))
@@ -123,3 +123,6 @@ def get_coins():
 
 def get_coin(ticker):
     return Coin(ticker)
+	
+if __name__ == '__main__':
+	print(get_coins())
