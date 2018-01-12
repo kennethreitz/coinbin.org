@@ -1,4 +1,4 @@
-# ₿ Coinhub.org
+# ₿ Coinbin.org
 
 ### The Human–Friendly API Service for Crypto Currency Information.
 
