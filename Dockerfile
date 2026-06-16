@@ -10,11 +10,16 @@ ENV UV_COMPILE_BYTECODE=1 \
     PATH="/app/.venv/bin:$PATH"
 
 # Install dependencies first for better layer caching. The forecasting extra
-# (prophet/pandas/numpy/...) is intentionally omitted; enable it by adding
-# `--extra forecast` here and setting FORECASTS_ENABLED=1 at runtime.
+# (prophet/pandas/numpy/...) is heavy and off by default; build with
+# `--build-arg INSTALL_FORECAST=true` and run with FORECASTS_ENABLED=1.
+ARG INSTALL_FORECAST=false
 COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+    if [ "$INSTALL_FORECAST" = "true" ]; then \
+        uv sync --frozen --no-dev --extra forecast; \
+    else \
+        uv sync --frozen --no-dev; \
+    fi
 
 # Application code.
 COPY . .

@@ -120,21 +120,43 @@ any of the variables below as environment variables.
 | `SENTRY_DSN` | Optional error reporting. |
 | `DEBUG` | Disable forced HTTPS for local development. |
 
-### Price history & forecasts
+### Price history & the ingestion cron
 
-`/history` and `/forecast` read from the `api_coin` table (see `schema.sql`).
-Populate it on a schedule with the ingestion worker:
+`/history` and `/forecast` read from the `api_coin` table (see `schema.sql`),
+which is populated by `ingest.py`. Run it locally with:
 
 ```console
 $ DATABASE_URL=postgres://... uv run python ingest.py
 ```
 
-Forecasting (`/forecast`) additionally needs the optional, heavyweight
-`prophet` stack and `FORECASTS_ENABLED=1`:
+On Dokploy, add a **Schedule** to the application (Schedules tab) so it runs
+inside the app container:
+
+- **Schedule (cron):** `*/10 * * * *`  (every 10 minutes)
+- **Command:** `python ingest.py`
+- **Service:** the coinbin app service
+
+`ingest.py` creates the table from `schema.sql` on first run and reuses the
+app's `DATABASE_URL` (and `INGEST_PRO_URL` / `HEROKU_POSTGRESQL_TEAL_URL` if
+you mirror into a "pro" database).
+
+### Forecasts
+
+`/forecast` additionally needs the optional, heavyweight `prophet` stack and
+`FORECASTS_ENABLED=1`. Build the image with the extra included:
 
 ```console
-$ uv sync --extra forecast    # prophet, pandas, numpy, matplotlib, mpld3
+$ docker build --build-arg INSTALL_FORECAST=true -t coinbin .
 ```
+
+(or locally: `uv sync --extra forecast`). Then set `FORECASTS_ENABLED=1`.
+Forecasts also require the `api_coin` table to already contain history.
+
+> **Note:** prophet's `cmdstanpy` backend needs a compiled CmdStan and a C++
+> toolchain, which the slim base image does not include. Enabling forecasts in
+> Docker therefore also requires adding `build-essential` and running
+> `python -m cmdstanpy.install_cmdstan` in the image. This is why forecasting
+> is opt-in.
 
 ## More Resources
 
