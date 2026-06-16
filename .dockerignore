@@ -6,8 +6,6 @@ __pycache__/
 **/__pycache__/
 *.pyc
 *.pyo
-Procfile
-app.json
 README.md
 static/.DS_Store
 **/.DS_Store
