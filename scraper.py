@@ -13,18 +13,39 @@ except ImportError:  # crayons is only used for pretty logging
 
 # CoinMarketCap removed the free `/currencies/views/all/` HTML page this code
 # used to scrape, so the data layer now talks to a JSON price API instead.
-# CoinGecko is the default because it needs no API key; set COINGECKO_API_BASE
-# (and optionally COINGECKO_API_KEY) to point at a different/pro instance.
-API_BASE = os.environ.get('COINGECKO_API_BASE', 'https://api.coingecko.com/api/v3')
-API_KEY = os.environ.get('COINGECKO_API_KEY')
+#
+# CoinGecko has two hosts/keys:
+#   - Demo (free):  https://api.coingecko.com/api/v3      header x-cg-demo-api-key
+#   - Pro (paid):   https://pro-api.coingecko.com/api/v3  header x-cg-pro-api-key
+# Keyless access still works but is heavily rate-limited and often blocked from
+# datacenter IPs, so a Demo key is recommended in production. The base URL is
+# auto-selected from whichever key is set; override with COINGECKO_API_BASE.
+PUBLIC_API_BASE = 'https://api.coingecko.com/api/v3'
+PRO_API_BASE = 'https://pro-api.coingecko.com/api/v3'
+
+API_KEY = os.environ.get('COINGECKO_API_KEY')           # Pro key
+DEMO_API_KEY = os.environ.get('COINGECKO_DEMO_API_KEY')  # Demo (free) key
+
+if os.environ.get('COINGECKO_API_BASE'):
+    API_BASE = os.environ['COINGECKO_API_BASE']
+elif API_KEY:
+    API_BASE = PRO_API_BASE
+else:
+    API_BASE = PUBLIC_API_BASE
+
 # Number of 250-coin pages to pull (ordered by market cap).
 PAGES = int(os.environ.get('COINGECKO_PAGES', '4'))
 PER_PAGE = 250
 
 session = requests.Session()
-session.headers.update({'User-Agent': 'coinbin.org/2 (+https://coinbin.org)'})
+session.headers.update({
+    'User-Agent': 'coinbin.org/2 (+https://coinbin.org)',
+    'Accept': 'application/json',
+})
 if API_KEY:
-    session.headers.update({'x-cg-pro-api-key': API_KEY})
+    session.headers['x-cg-pro-api-key'] = API_KEY
+elif DEMO_API_KEY:
+    session.headers['x-cg-demo-api-key'] = DEMO_API_KEY
 
 
 def _log(msg):

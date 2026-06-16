@@ -111,7 +111,9 @@ any of the variables below as environment variables.
 | Variable | Purpose |
 | --- | --- |
 | `DATABASE_URL` | Postgres for `/history` (optional; empty history is returned if unset). |
-| `COINGECKO_API_BASE` / `COINGECKO_API_KEY` | Point at a different/pro CoinGecko instance. |
+| `COINGECKO_DEMO_API_KEY` | CoinGecko Demo (free) key — recommended; keyless access is rate-limited and often blocked from datacenter IPs. |
+| `COINGECKO_API_KEY` | CoinGecko Pro key (auto-targets `pro-api.coingecko.com`). |
+| `COINGECKO_API_BASE` | Override the API base URL (e.g. a proxy). |
 | `COINGECKO_PAGES` | Number of 250-coin pages to fetch (default `4`). |
 | `API_KEYS` | Colon-separated keys for the "pro" history database. |
 | `FORECASTS_ENABLED` | Set to `1` to enable the (heavy) `/forecast` endpoints. |
