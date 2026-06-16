@@ -92,6 +92,20 @@ Live price data comes from a JSON price API (CoinGecko by default — no key
 required). The app boots and serves the live price/conversion endpoints with no
 further configuration.
 
+### Deploying (Docker / Dokploy)
+
+The included `Dockerfile` builds a uv-based image and serves with gunicorn on
+`$PORT` (default `8000`):
+
+```console
+$ docker build -t coinbin .
+$ docker run -p 8000:8000 coinbin
+```
+
+On [Dokploy](https://dokploy.com/), create an **Application**, point it at this
+repo with build type **Dockerfile**, set the container port to `8000`, and add
+any of the variables below as environment variables.
+
 ### Configuration
 
 | Variable | Purpose |
