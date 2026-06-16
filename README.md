@@ -79,6 +79,47 @@ This free web service exists to provide information on "coins". Supports all cry
 }
 ```
 
+## Running it
+
+Dependencies are managed with [uv](https://docs.astral.sh/uv/):
+
+```console
+$ uv sync
+$ uv run gunicorn server:app -k gthread --threads 4
+```
+
+Live price data comes from a JSON price API (CoinGecko by default — no key
+required). The app boots and serves the live price/conversion endpoints with no
+further configuration.
+
+### Configuration
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Postgres for `/history` (optional; empty history is returned if unset). |
+| `COINGECKO_API_BASE` / `COINGECKO_API_KEY` | Point at a different/pro CoinGecko instance. |
+| `COINGECKO_PAGES` | Number of 250-coin pages to fetch (default `4`). |
+| `API_KEYS` | Colon-separated keys for the "pro" history database. |
+| `FORECASTS_ENABLED` | Set to `1` to enable the (heavy) `/forecast` endpoints. |
+| `SENTRY_DSN` | Optional error reporting. |
+| `DEBUG` | Disable forced HTTPS for local development. |
+
+### Price history & forecasts
+
+`/history` and `/forecast` read from the `api_coin` table (see `schema.sql`).
+Populate it on a schedule with the ingestion worker:
+
+```console
+$ DATABASE_URL=postgres://... uv run python ingest.py
+```
+
+Forecasting (`/forecast`) additionally needs the optional, heavyweight
+`prophet` stack and `FORECASTS_ENABLED=1`:
+
+```console
+$ uv sync --extra forecast    # prophet, pandas, numpy, matplotlib, mpld3
+```
+
 ## More Resources
 
 - [Awesome Crypto Currency Tools & Algorithms (Guide)](https://github.com/kennethreitz/awesome-coins)

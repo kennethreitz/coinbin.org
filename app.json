@@ -4,27 +4,29 @@
   },
   "env": {
     "API_KEYS": {
-      "required": true
+      "description": "Colon-separated keys granting access to the pro history database.",
+      "required": false
     },
-    "HEROKU_POSTGRESQL_AMBER_URL": {
-      "required": true
+    "COINGECKO_API_KEY": {
+      "description": "Optional CoinGecko Pro API key.",
+      "required": false
     },
-    "HEROKU_POSTGRESQL_TEAL_URL": {
-      "required": true
+    "FORECASTS_ENABLED": {
+      "description": "Set to 1 to enable the (heavy) /forecast endpoints.",
+      "required": false
     },
     "SENTRY_DSN": {
-      "required": true
+      "description": "Optional Sentry error reporting DSN.",
+      "required": false
     },
     "WEB_CONCURRENCY": {
-      "required": true
+      "required": false
     }
   },
   "formation": {
   },
   "addons": [
-    "heroku-postgresql",
-    "heroku-postgresql",
-    "sentry"
+    "heroku-postgresql"
   ],
   "buildpacks": [
     {

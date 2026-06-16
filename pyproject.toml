@@ -1,0 +1,33 @@
+[project]
+name = "coinbin"
+version = "2.0.0"
+description = "The Human-Friendly API Service for Crypto Currency Information."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask",
+    "flask-caching",
+    "flask-sslify",
+    "graphene>=3",
+    "requests",
+    "maya",
+    "crayons",
+    "records",
+    "psycopg2-binary",
+    "gunicorn",
+    "sentry-sdk[flask]",
+]
+
+[project.optional-dependencies]
+# Optional, heavyweight forecasting stack used by the /forecast endpoints.
+# Install with: uv sync --extra forecast  (and run with FORECASTS_ENABLED=1)
+forecast = [
+    "prophet",
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "mpld3",
+]
+
+[tool.uv]
+package = false

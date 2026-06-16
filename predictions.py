@@ -1,20 +1,4 @@
-import time
-import uuid
-
-import records
 import os
-
-import maya
-import numpy as np
-import pandas as pd
-
-# Matplotlib hack.
-
-import matplotlib
-matplotlib.use('agg')
-
-import mpld3
-from fbprophet import Prophet
 
 from scraper import Coin, MWT, convert_to_decimal
 
@@ -22,13 +6,29 @@ from scraper import Coin, MWT, convert_to_decimal
 PERIODS = 30
 GRAPH_PERIODS = 365
 
+# Forecasting pulls in a heavy, hard-to-build stack (prophet + cmdstanpy,
+# pandas, numpy, matplotlib, mpld3) and needs the price-history database to be
+# populated, so it is opt-in. Enable with FORECASTS_ENABLED=1 once those
+# dependencies are installed (see the [forecast] extras in the Pipfile).
+FORECASTS_ENABLED = os.environ.get('FORECASTS_ENABLED', '').lower() in ('1', 'true', 'yes')
+
+_DISABLED_MESSAGE = {
+    'enabled': False,
+    'message': 'Forecasting is currently disabled on this instance.',
+}
 
 
-@MWT(timeout=300)
-def get_predictions(coin, render=False):
-    """Returns a list of predictions, unless render is True.
-    Otherwise, returns the path of a rendered image.
-    """
+def _build_predictions(coin, render=False):
+    """The real forecasting routine; only imported when enabled."""
+    import records
+    import maya
+    import numpy as np
+
+    # Matplotlib must pick a headless backend before pyplot is imported.
+    import matplotlib
+    matplotlib.use('agg')
+    import mpld3
+    from prophet import Prophet
 
     c = Coin(coin)
 
@@ -39,7 +39,7 @@ def get_predictions(coin, render=False):
 
     df = rows.export('df')
 
-    df['y_orig'] = df['y']  # to save a copy of the original data..you'll see why shortly. 
+    df['y_orig'] = df['y']  # to save a copy of the original data..you'll see why shortly.
 
     # log-transform y
     df['y'] = np.log(df['y'])
@@ -62,15 +62,14 @@ def get_predictions(coin, render=False):
     forecast_data_orig['yhat_lower'] = np.exp(forecast_data_orig['yhat_lower'])
     forecast_data_orig['yhat_upper'] = np.exp(forecast_data_orig['yhat_upper'])
 
-    df['y_log'] = df['y']  #copy the log-transformed data to another column
-    df['y'] = df['y_orig']  #copy the original data to 'y'
+    df['y_log'] = df['y']  # copy the log-transformed data to another column
+    df['y'] = df['y_orig']  # copy the original data to 'y'
 
-    # print(forecast_data_orig)
     d = forecast_data_orig['yhat'].to_dict()
     predictions = []
 
     for i, k in enumerate(list(d.keys())[-PERIODS:]):
-        w = maya.when(f'{i+1} days from now')
+        w = maya.when('{} days from now'.format(i + 1))
         predictions.append({
             'when': w.slang_time(),
             'timestamp': w.iso8601(),
@@ -78,6 +77,30 @@ def get_predictions(coin, render=False):
         })
 
     return predictions
+
+
+@MWT(timeout=300)
+def get_predictions(coin, render=False):
+    """Returns a list of predictions, unless render is True.
+    Otherwise, returns rendered HTML.
+
+    When forecasting is disabled (the default) or its optional dependencies are
+    missing, returns a small explanatory payload instead of raising.
+    """
+    if not FORECASTS_ENABLED:
+        if render:
+            return '<p>Forecasting is currently disabled on this instance.</p>'
+        return _DISABLED_MESSAGE
+
+    try:
+        return _build_predictions(coin, render=render)
+    except ImportError:
+        if render:
+            return '<p>Forecasting dependencies are not installed.</p>'
+        return {
+            'enabled': False,
+            'message': 'Forecasting dependencies are not installed.',
+        }
 
 
 if __name__ == '__main__':
