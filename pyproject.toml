@@ -28,6 +28,11 @@ forecast = [
     "matplotlib",
     "mpld3",
 ]
+# MCP server (mcp_server.py) so LLM agents can use coinbin as a tool.
+# Install with: uv sync --extra agent
+agent = [
+    "mcp",
+]
 
 [tool.uv]
 package = false

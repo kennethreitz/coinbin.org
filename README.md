@@ -47,6 +47,43 @@ $ curl "https://coinbin.org/eth/2?vs=eur"
 ```
 
 Unsupported currencies return `400`.
+
+#### Response formats (`?format=` / `Accept`)
+
+JSON is the default, but every price/value endpoint also speaks **plain text**
+and **CSV** — so the same data drops straight into shells and spreadsheets:
+
+```console
+$ curl "https://coinbin.org/btc?format=text"        # just the number
+60000
+
+$ curl -H "Accept: text/plain" https://coinbin.org/btc/to/eth
+20
+
+# Google Sheets:
+=IMPORTDATA("https://coinbin.org/coins?format=csv")
+```
+
+#### Price badges
+
+Embeddable, shields.io-style SVG badges (green/red by 24h change):
+
+```markdown
+![BTC](https://coinbin.org/btc/badge.svg)
+![ETH in EUR](https://coinbin.org/eth/badge.svg?vs=eur&label=ether)
+```
+
+#### For LLMs & agents
+
+- `GET /openapi.json` — machine-readable API spec for tool/function calling.
+- `GET /llms.txt` — a short, LLM-readable guide to the endpoints.
+- `mcp_server.py` — an MCP server exposing `get_price`, `convert`, and
+  `list_coins` so agents can use coinbin as a keyless tool:
+
+  ```console
+  $ uv sync --extra agent
+  $ uv run python mcp_server.py
+  ```
       
 
 `$ curl https://coinbin.org/lbc/42.01`
