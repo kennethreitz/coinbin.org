@@ -11,14 +11,26 @@ This free web service exists to provide information on "coins". Supports all cry
 ```json
 {
   "coin": {
-    "name": "LBRY Credits", 
-    "rank": "100", 
-    "ticker": "lbc", 
-    "value": 0.429737, 
-    "value.currency": "USD"
+    "name": "LBRY Credits",
+    "ticker": "lbc",
+    "rank": 100,
+    "usd": 0.429737,
+    "btc": 0.00000717,
+    "market_cap": 28000000,
+    "volume_24h": 150000,
+    "change_24h": -2.31,
+    "circulating_supply": 650000000,
+    "total_supply": 1000000000,
+    "ath": 1.07,
+    "last_updated": "2026-06-16T20:00:00Z"
   }
 }
 ```
+
+The `/<coin>` endpoint now also returns market cap, 24h volume, 24h change,
+supply, and all-time high — data the upstream API already provides. Exchange
+rates are computed via USD (crypto is USD/stablecoin-quoted now) rather than
+routed through BTC.
       
 
 `$ curl https://coinbin.org/lbc/42.01`

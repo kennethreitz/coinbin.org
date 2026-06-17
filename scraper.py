@@ -90,7 +90,22 @@ class MWT(object):
 
 
 def convert_to_decimal(f):
-    return Decimal("{0:.8f}".format(f))
+    """Format a number as a Decimal.
+
+    Uses 8 decimal places for normal magnitudes (back-compatible), but keeps
+    significant figures for very small "sub-satoshi" prices, which are common
+    with the high-supply / meme tokens that didn't exist when this was written.
+    Without this, a price like 1.2e-10 would round to 0.00000000.
+    """
+    if f is None:
+        return None
+    d = Decimal(str(f))
+    if d == 0:
+        return Decimal('0')
+    if abs(d) >= Decimal('0.00000001'):
+        return d.quantize(Decimal('0.00000001'))
+    # Sub-1e-8: preserve ~6 significant figures instead of truncating to zero.
+    return d.quantize(Decimal(1).scaleb(d.adjusted() - 5))
 
 
 class Coin():
@@ -112,9 +127,19 @@ class Coin():
         if self.ticker not in coins:
             raise KeyError('Unknown coin: {!r}'.format(self.ticker))
 
-        self.name = coins[self.ticker]['name']
-        self.rank = coins[self.ticker]['rank']
-        self._usd = coins[self.ticker]['usd']
+        data = coins[self.ticker]
+        self.name = data['name']
+        self.rank = data['rank']
+        self._usd = data['usd']
+
+        # Richer market data that modern crypto APIs expose (and clients expect).
+        self.market_cap = data.get('market_cap')
+        self.volume_24h = data.get('volume_24h')
+        self.change_24h = data.get('change_24h')
+        self.circulating_supply = data.get('circulating_supply')
+        self.total_supply = data.get('total_supply')
+        self.ath = data.get('ath')
+        self.last_updated = data.get('last_updated')
 
     @property
     def usd(self):
@@ -124,11 +149,20 @@ class Coin():
     def btc(self):
         coins = get_coins()
         rate = coins['btc']['usd']
+        if not rate:
+            return convert_to_decimal(0)
         return convert_to_decimal(self.usd / rate)
 
     def value(self, coin):
-        """Example: BTC -> ETH"""
-        return convert_to_decimal(self.btc / Coin(coin).btc)
+        """Exchange rate from this coin to another (e.g. BTC -> ETH).
+
+        Computed via USD rather than via BTC: crypto is USD/stablecoin-quoted
+        now, and going through USD avoids breaking when a BTC price is missing.
+        """
+        other = Coin(coin)
+        if not other.usd:
+            return convert_to_decimal(0)
+        return convert_to_decimal(self.usd / other.usd)
 
     def __repr__(self):
         return '<Coin ticker={!r}>'.format(self.ticker)
@@ -196,6 +230,14 @@ def get_coins():
             'ticker': ticker,
             'usd': usd,
             'btc': btc,
+            # Richer fields the API already returns; cheap to keep, expected now.
+            'market_cap': row.get('market_cap'),
+            'volume_24h': row.get('total_volume'),
+            'change_24h': row.get('price_change_percentage_24h'),
+            'circulating_supply': row.get('circulating_supply'),
+            'total_supply': row.get('total_supply'),
+            'ath': row.get('ath'),
+            'last_updated': row.get('last_updated'),
         }
 
     return coins_db

@@ -9,11 +9,28 @@ def name_to_ticker(name):
             return coin['ticker']
 
 
+def _as_float(v):
+    return float(v) if v is not None else None
+
+
 def _to_graphql_coin(c):
     """Build a GraphQL Coin from a scraper.Coin or a coins dict row."""
-    if isinstance(c, dict):
-        return Coin(ticker=c['ticker'], name=c['name'], rank=c['rank'], usd=float(c['usd']))
-    return Coin(ticker=c.ticker, name=c.name, rank=c.rank, usd=float(c.usd))
+    if not isinstance(c, dict):
+        c = {
+            'ticker': c.ticker, 'name': c.name, 'rank': c.rank, 'usd': c.usd,
+            'market_cap': c.market_cap, 'volume_24h': c.volume_24h,
+            'change_24h': c.change_24h, 'circulating_supply': c.circulating_supply,
+            'total_supply': c.total_supply, 'ath': c.ath,
+        }
+    return Coin(
+        ticker=c['ticker'], name=c['name'], rank=c['rank'], usd=_as_float(c['usd']),
+        market_cap=_as_float(c.get('market_cap')),
+        volume_24h=_as_float(c.get('volume_24h')),
+        change_24h=_as_float(c.get('change_24h')),
+        circulating_supply=_as_float(c.get('circulating_supply')),
+        total_supply=_as_float(c.get('total_supply')),
+        ath=_as_float(c.get('ath')),
+    )
 
 
 class Coin(graphene.ObjectType):
@@ -21,6 +38,12 @@ class Coin(graphene.ObjectType):
     name = graphene.String()
     rank = graphene.Int()
     usd = graphene.Float()
+    market_cap = graphene.Float()
+    volume_24h = graphene.Float()
+    change_24h = graphene.Float()
+    circulating_supply = graphene.Float()
+    total_supply = graphene.Float()
+    ath = graphene.Float()
 
 
 class Query(graphene.ObjectType):

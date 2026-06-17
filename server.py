@@ -99,6 +99,13 @@ def get_coin(coin):
         'rank': c.rank,
         'usd': c.usd,
         'btc': c.btc,
+        'market_cap': c.market_cap,
+        'volume_24h': c.volume_24h,
+        'change_24h': c.change_24h,
+        'circulating_supply': c.circulating_supply,
+        'total_supply': c.total_supply,
+        'ath': c.ath,
+        'last_updated': c.last_updated,
     })
 
 
