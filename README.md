@@ -31,6 +31,22 @@ The `/<coin>` endpoint now also returns market cap, 24h volume, 24h change,
 supply, and all-time high — data the upstream API already provides. Exchange
 rates are computed via USD (crypto is USD/stablecoin-quoted now) rather than
 routed through BTC.
+
+#### Quote currencies (`?vs=`)
+
+Price and value endpoints accept an optional `?vs=<currency>` (e.g. `eur`,
+`gbp`, `jpy`, `btc`) to add a non-USD quote. The `usd` fields are always
+present and unchanged, so existing clients are unaffected:
+
+```console
+$ curl "https://coinbin.org/eth?vs=eur"
+{ "coin": { "usd": 3000.0, "vs": "eur", "vs_price": 2700.0, ... } }
+
+$ curl "https://coinbin.org/eth/2?vs=eur"
+{ "coin": { "usd": 6000.0, "vs": "eur", "vs_exchange_rate": 2700.0, "vs_value": 5400.0 } }
+```
+
+Unsupported currencies return `400`.
       
 
 `$ curl https://coinbin.org/lbc/42.01`

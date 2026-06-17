@@ -6,6 +6,7 @@ from flask.json.provider import DefaultJSONProvider
 from flask_caching import Cache
 from flask_sslify import SSLify
 
+import scraper
 from scraper import get_coins, get_coin, Coin, convert_to_decimal
 from predictions import get_predictions
 from graph import schema
@@ -68,6 +69,33 @@ def _get_db(env_var=None):
     return _dbs[key]
 
 
+def _augment_vs(payload, coin, n=None):
+    """Optionally add a non-USD quote (?vs=eur) to a coin payload.
+
+    Additive: the existing USD fields are always present and unchanged. Returns
+    an error response tuple if the requested currency is unsupported, else None.
+    """
+    vs = (request.args.get('vs') or '').lower()
+    if not vs or vs == 'usd':
+        return None
+
+    supported = scraper.supported_vs_currencies()
+    if supported and vs not in supported:
+        return jsonify(error='Unsupported vs currency: {!r}'.format(vs)), 400
+
+    price = scraper.price_in(coin, vs)
+    if price is None:
+        return None
+
+    payload['vs'] = vs
+    if n is None:
+        payload['vs_price'] = convert_to_decimal(price)
+    else:
+        payload['vs_exchange_rate'] = convert_to_decimal(price)
+        payload['vs_value'] = convert_to_decimal(price * n)
+    return None
+
+
 @app.route('/')
 @cache.cached(timeout=60)
 def hello():
@@ -93,7 +121,7 @@ def all_coins():
 def get_coin(coin):
     c = Coin(coin.lower())
 
-    return jsonify(coin={
+    payload = {
         'name': c.name,
         'ticker': c.ticker,
         'rank': c.rank,
@@ -106,7 +134,11 @@ def get_coin(coin):
         'total_supply': c.total_supply,
         'ath': c.ath,
         'last_updated': c.last_updated,
-    })
+    }
+    err = _augment_vs(payload, coin.lower())
+    if err:
+        return err
+    return jsonify(coin=payload)
 
 
 @app.route('/<coin>/forecast')
@@ -122,10 +154,14 @@ def get_forecast_graph(coin):
 @app.route('/<coin>/<float:n>')
 def get_value(coin, n):
     c = Coin(coin.lower())
-    return jsonify(coin={
+    payload = {
         'usd': convert_to_decimal(c.usd * n),
         'exchange_rate': c.usd,
-    })
+    }
+    err = _augment_vs(payload, coin.lower(), n=n)
+    if err:
+        return err
+    return jsonify(coin=payload)
 
 
 @app.route('/<coin>/<int:n>')

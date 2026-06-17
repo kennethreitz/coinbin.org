@@ -168,14 +168,14 @@ class Coin():
         return '<Coin ticker={!r}>'.format(self.ticker)
 
 
-def _fetch_markets():
+def _fetch_markets(vs_currency='usd'):
     """Yield raw market rows from the price API, highest market cap first."""
     rows = []
     for page in range(1, PAGES + 1):
         r = session.get(
             '{}/coins/markets'.format(API_BASE),
             params={
-                'vs_currency': 'usd',
+                'vs_currency': vs_currency,
                 'order': 'market_cap_desc',
                 'per_page': PER_PAGE,
                 'page': page,
@@ -245,6 +245,39 @@ def get_coins():
 
 def get_coin(ticker):
     return Coin(ticker)
+
+
+@MWT(timeout=300)
+def _prices_in(vs_currency):
+    """Map ticker -> current price in an arbitrary quote currency.
+
+    The main USD path (get_coins) is left untouched; this is a separate,
+    independently-cached fetch used only for non-USD `?vs=` lookups.
+    """
+    prices = {}
+    for row in _fetch_markets(vs_currency):
+        ticker = (row.get('symbol') or '').lower()
+        if ticker and ticker not in prices:
+            prices[ticker] = row.get('current_price') or 0
+    return prices
+
+
+def price_in(ticker, vs_currency):
+    """Current price of a coin in the given quote currency, or None."""
+    return _prices_in(vs_currency.lower()).get(ticker.lower())
+
+
+@MWT(timeout=3600)
+def supported_vs_currencies():
+    """Set of quote currencies the upstream API supports (best-effort)."""
+    try:
+        r = session.get(
+            '{}/simple/supported_vs_currencies'.format(API_BASE), timeout=30,
+        )
+        r.raise_for_status()
+        return set(x.lower() for x in r.json())
+    except Exception:
+        return set()
 
 
 if __name__ == '__main__':
